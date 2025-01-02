@@ -1,21 +1,7 @@
-# salary_calculator.py
-# A script to calculate monthly salary based on hours worked, Sunday work, holiday work, and overtime.
+import tkinter as tk
+from tkinter import messagebox
 
 def calculate_salary(hours_worked, sundays_worked, holidays_worked, overtime_hours=0):
-    """
-    Calculate the monthly salary considering:
-    - Regular hours worked
-    - Sunday pay (1.5x rate)
-    - Holiday pay (2x rate)
-    - Overtime pay (same as regular rate)
-
-    :param hours_worked: Total hours worked in a month (excluding weekends and holidays)
-    :param sundays_worked: Number of Sundays worked
-    :param holidays_worked: Number of holidays worked
-    :param overtime_hours: Number of overtime hours worked (optional, defaults to 0)
-    
-    :return: Total salary, and detailed breakdown of payments
-    """
     hourly_rate = 27.53  # Rate per hour
     sunday_multiplier = 1.5  # Sunday pay multiplier (regular + half)
     holiday_multiplier = 2  # Holiday pay multiplier (double pay)
@@ -37,38 +23,55 @@ def calculate_salary(hours_worked, sundays_worked, holidays_worked, overtime_hou
     
     return total_salary, regular_pay, sunday_pay, holiday_pay, overtime_pay
 
-def display_salary_details(hours_per_day, working_days_per_month, sundays_worked, holidays_worked, overtime_hours=0):
-    """
-    Display the salary breakdown including regular pay, Sunday pay, holiday pay, and overtime pay.
+def display_salary_details():
+    hours_per_day = float(entry_hours_per_day.get())
+    working_days_per_month = int(entry_working_days.get())
+    sundays_worked = int(entry_sundays.get())
+    holidays_worked = int(entry_holidays.get())
+    overtime_hours = int(entry_overtime.get())
     
-    :param hours_per_day: Number of hours worked per day
-    :param working_days_per_month: Number of working days in a month
-    :param sundays_worked: Number of Sundays worked
-    :param holidays_worked: Number of holidays worked
-    :param overtime_hours: Number of overtime hours worked (optional)
-    """
     total_hours = hours_per_day * working_days_per_month
 
     # Calculate salary
     total_salary, regular_pay, sunday_pay, holiday_pay, overtime_pay = calculate_salary(
         total_hours, sundays_worked, holidays_worked, overtime_hours)
     
-    print("\n---- Salary Breakdown ----")
-    print(f"Regular Pay: R{regular_pay:.2f}")
-    print(f"Sunday Pay (1.5x): R{sunday_pay:.2f}")
-    print(f"Holiday Pay (2x): R{holiday_pay:.2f}")
-    print(f"Overtime Pay: R{overtime_pay:.2f}")
-    print(f"Total Monthly Salary: R{total_salary:.2f}")
+    result = (
+        f"Regular Pay: R{regular_pay:.2f}\n"
+        f"Sunday Pay (1.5x): R{sunday_pay:.2f}\n"
+        f"Holiday Pay (2x): R{holiday_pay:.2f}\n"
+        f"Overtime Pay: R{overtime_pay:.2f}\n"
+        f"Total Monthly Salary: R{total_salary:.2f}"
+    )
+    messagebox.showinfo("Salary Breakdown", result)
 
-# If you want to run this script, use the code below to prompt the user for input.
+# Create the main window
+root = tk.Tk()
+root.title("Salary Calculator")
 
-if __name__ == "__main__":
-    # Input: User details
-    hours_per_day = float(input("Enter the number of hours worked per day: "))
-    working_days_per_month = int(input("Enter the number of working days in a month (excluding Sundays and holidays): "))
-    sundays_worked = int(input("Enter the number of Sundays worked: "))
-    holidays_worked = int(input("Enter the number of holidays worked: "))
-    overtime_hours = int(input("Enter the number of overtime hours worked: "))
+# Create and place the input fields and labels
+tk.Label(root, text="Hours worked per day:").grid(row=0, column=0, padx=10, pady=5)
+entry_hours_per_day = tk.Entry(root)
+entry_hours_per_day.grid(row=0, column=1, padx=10, pady=5)
 
-    # Display the salary breakdown
-    display_salary_details(hours_per_day, working_days_per_month, sundays_worked, holidays_worked, overtime_hours)
+tk.Label(root, text="Working days per month:").grid(row=1, column=0, padx=10, pady=5)
+entry_working_days = tk.Entry(root)
+entry_working_days.grid(row=1, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Sundays worked:").grid(row=2, column=0, padx=10, pady=5)
+entry_sundays = tk.Entry(root)
+entry_sundays.grid(row=2, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Holidays worked:").grid(row=3, column=0, padx=10, pady=5)
+entry_holidays = tk.Entry(root)
+entry_holidays.grid(row=3, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Overtime hours:").grid(row=4, column=0, padx=10, pady=5)
+entry_overtime = tk.Entry(root)
+entry_overtime.grid(row=4, column=1, padx=10, pady=5)
+
+# Create and place the calculate button
+tk.Button(root, text="Calculate Salary", command=display_salary_details).grid(row=5, column=0, columnspan=2, pady=20)
+
+# Run the GUI event loop
+root.mainloop()
